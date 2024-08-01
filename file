@@ -1,0 +1,4 @@
+
+int M;
+
+#define M(a) M+
