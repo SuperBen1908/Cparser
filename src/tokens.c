@@ -14,6 +14,7 @@
 #include "../../DS/inc/hash.h"
 
 #include "../../utils/error.h"
+#include "../../utils/constants.h"
 
 
 #define HASH_SIZE_TOKEN (1024)

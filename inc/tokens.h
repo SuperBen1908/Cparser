@@ -7,8 +7,7 @@
 #include "../../DS/inc/vector.h"
 
 #include "../../utils/error.h"
-
-#define TOKEN_MAX_SIZE (128)
+#include "../../utils/constants.h"
 
 /***************/
 /* ENUMS START */

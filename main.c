@@ -9,6 +9,7 @@
 #include "inc/preprocessor.h"
 
 #include "../utils/error.h"
+#include "../utils/constants.h"
 
 #define MAX_BUF_SIZE (8<<20)
 

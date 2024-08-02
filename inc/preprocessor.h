@@ -10,6 +10,7 @@
 #include "../../DS/inc/hash.h"
 
 #include "../../utils/error.h"
+#include "../../utils/constants.h"
 
 
 /*******/
