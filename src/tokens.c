@@ -36,12 +36,9 @@ static char tok_buf[TOKEN_MAX_SIZE];
 static token_e token_lut[256];
 static char char_special_lut[256];
 
-/****************
- * Declarations *
- ****************/
-static size_t token_hash(void *item);
-static int token_cmp(void *item1, void *item2);
-
+/************************/
+/* Forward Declerations */
+/************************/
 static int parse_char_literal(  IN  token_t *token, IN      char    *buf,
 							    IN  size_t  len,    IN_OUT  size_t  *idx);
 static int parse_string_literal(IN  token_t *token, IN      char    *buf,
@@ -53,9 +50,12 @@ static int parse_keyword(       IN  token_t *token, IN      char    *buf,
 static int parse_operator(      IN  token_t *token, IN      char    *buf,
                                 IN  size_t  len,    IN_OUT  size_t  *idx);
 
-/*************
- * Functions *
- *************/
+static size_t token_hash(void *item);
+static int token_cmp(void *item1, void *item2);
+
+/*****************/
+/* API Functions */
+/*****************/
 int tokens_start(void)
 {
     int err = ERR_OK;
@@ -189,19 +189,9 @@ void tokens_destroy(IN file_tokens_t tokens)
     VectorClear(tokens.vec);
 }
 
-static size_t token_hash(void *item)
-{
-    return (HashStr(((token_t *)item)->str)%HASH_SIZE_TOKEN);
-}
-static int token_cmp(void *item1, void *item2)
-{
-    if (strncmp(((token_t *)item1)->str, ((token_t *)item2)->str, TOKEN_MAX_SIZE))
-        return (1);
-    if (((token_t *)item2)->type != 0)
-        return (((token_t *)item1)->type != ((token_t *)item2)->type);
-    return (0);
-}
-
+/********************/
+/* Helper Functions */
+/********************/
 static int parse_char_literal(IN     token_t *token,
 							  IN     char    *buf,
 							  IN     size_t  len,
@@ -347,3 +337,18 @@ static int parse_operator(IN     token_t *token,
 
     return (ERR_OK);
 }
+
+static size_t token_hash(void *item)
+{
+    return (HashStr(((token_t *)item)->str)%HASH_SIZE_TOKEN);
+}
+
+static int token_cmp(void *item1, void *item2)
+{
+    if (strncmp(((token_t *)item1)->str, ((token_t *)item2)->str, TOKEN_MAX_SIZE))
+        return (1);
+    if (((token_t *)item2)->type != 0)
+        return (((token_t *)item1)->type != ((token_t *)item2)->type);
+    return (0);
+}
+

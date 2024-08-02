@@ -6,8 +6,8 @@
 
 #include "../inc/tokens.h"
 
-#include "../../DS/inc/vector.h"
 #include "../../DS/inc/hash.h"
+#include "../../DS/inc/vector.h"
 
 #include "../../utils/error.h"
 #include "../../utils/constants.h"

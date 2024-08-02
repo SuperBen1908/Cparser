@@ -8,8 +8,8 @@
 #include "../inc/preprocessor.h"
 #include "../inc/tokens.h"
 
-#include "../../DS/inc/vector.h"
 #include "../../DS/inc/hash.h"
+#include "../../DS/inc/vector.h"
 
 #include "../../utils/error.h"
 #include "../../utils/constants.h"
@@ -18,30 +18,31 @@
 #define HASH_SIZE_DEF (1024)
 
 
-/************************
- * Forward Declerations *
- ************************/
-static int macro_cmp(void *item1, void *item2);
-static int parse_define(file_tokens_t *tokens, file_defines_t *defines, size_t *idx);
-static int parse_undef(file_tokens_t *tokens, file_defines_t *defines, size_t *idx);
-static int parse_include(file_tokens_t *tokens, file_defines_t *defines, size_t *idx);
-static int parse_pragma(file_tokens_t *tokens, file_defines_t *defines, size_t *idx);
-static int parse_line(file_tokens_t *tokens, file_defines_t *defines, size_t *idx);
-static int parse_file(file_tokens_t *tokens, file_defines_t *defines, size_t *idx);
-static int parse_error(file_tokens_t *tokens, file_defines_t *defines, size_t *idx);
-static int parse_ifdef(file_tokens_t *tokens, file_defines_t *defines, size_t *idx);
-static int parse_ifndef(file_tokens_t *tokens, file_defines_t *defines, size_t *idx);
-static int parse_if(file_tokens_t *tokens, file_defines_t *defines, size_t *idx);
-static int parse_elif(file_tokens_t *tokens, file_defines_t *defines, size_t *idx);
-static int parse_else(file_tokens_t *tokens, file_defines_t *defines, size_t *idx);
-static int parse_endif(file_tokens_t *tokens, file_defines_t *defines, size_t *idx);
+/************************/
+/* Forward Declerations */
+/************************/
+static int parse_define(    file_tokens_t *tokens, file_defines_t *defines, size_t *idx);
+static int parse_undef(     file_tokens_t *tokens, file_defines_t *defines, size_t *idx);
+static int parse_include(   file_tokens_t *tokens, file_defines_t *defines, size_t *idx);
+static int parse_pragma(    file_tokens_t *tokens, file_defines_t *defines, size_t *idx);
+static int parse_line(      file_tokens_t *tokens, file_defines_t *defines, size_t *idx);
+static int parse_file(      file_tokens_t *tokens, file_defines_t *defines, size_t *idx);
+static int parse_error(     file_tokens_t *tokens, file_defines_t *defines, size_t *idx);
+static int parse_ifdef(     file_tokens_t *tokens, file_defines_t *defines, size_t *idx);
+static int parse_ifndef(    file_tokens_t *tokens, file_defines_t *defines, size_t *idx);
+static int parse_if(        file_tokens_t *tokens, file_defines_t *defines, size_t *idx);
+static int parse_elif(      file_tokens_t *tokens, file_defines_t *defines, size_t *idx);
+static int parse_else(      file_tokens_t *tokens, file_defines_t *defines, size_t *idx);
+static int parse_endif(     file_tokens_t *tokens, file_defines_t *defines, size_t *idx);
 
 static void clear_define(file_defines_t defines, define_t *def);
-static size_t macro_hash(void *item);
 
-/*****************
- * API Functions *
- *****************/
+static size_t macro_hash(void *item);
+static int macro_cmp(void *item1, void *item2);
+
+/*****************/
+/* API Functions */
+/*****************/
 int preprocessor_start(OUT file_defines_t *defines)
 {
     int err = ERR_OK;
@@ -152,9 +153,10 @@ int preprocessor_read(IN_OUT file_tokens_t  *tokens,
 
     return (ERR_OK);
 }
-/********************
- * Helper Functions *
- ********************/
+
+/********************/
+/* Helper Functions */
+/********************/
 static int parse_define(file_tokens_t *tokens, file_defines_t *defines, size_t *idx)
 {
     int err = ERR_OK;

@@ -5,8 +5,9 @@
 #include <unistd.h>
 #include <string.h>
 
-#include "inc/tokens.h"
+#include "inc/symbols.h"
 #include "inc/preprocessor.h"
+#include "inc/tokens.h"
 
 #include "../utils/error.h"
 #include "../utils/constants.h"
@@ -24,6 +25,7 @@ int main(void)
     static char buf[MAX_BUF_SIZE];
     file_defines_t defines = {0};
     file_tokens_t tokens = {0};
+    sym_table_t sym_table = {0};
 
     tokens_start();
     preprocessor_start(&defines);
@@ -37,9 +39,12 @@ int main(void)
         return (err);
     if ((err = preprocessor_read(&tokens, &defines)))
         return (printf("ERROR!!! preprocessor read\n"), err);
+    if ((err = symbols_start("file", &sym_table)))
+        return (printf("ERROR!!! symbol table read\n"), err);
 
     PrintFile(tokens, defines);
 
+    symbols_end(sym_table);
     preprocessor_end(defines);
 
     if (close(fd) == -1)
