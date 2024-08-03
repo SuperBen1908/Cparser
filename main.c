@@ -29,6 +29,9 @@ int main(void)
 
     tokens_start();
     preprocessor_start(&defines);
+    if ((err = symbols_start("file", &sym_table)))
+        return (printf("ERROR!!! symbol table start\n"), err);
+
     if ((fd = open("file", 0)) == -1)
         return (printf("ERROR!!! file didnt open\n"), -1);
 
@@ -36,10 +39,10 @@ int main(void)
     if ((len = read(fd, buf, MAX_BUF_SIZE)) == -1)
         return (printf("ERROR!!! file read err!!!\n"), -1);
     if ((err = tokens_read(buf, len, &tokens)))
-        return (err);
+        return (printf("ERROR!!! preprocessor read\n"), err);
     if ((err = preprocessor_read(&tokens, &defines)))
         return (printf("ERROR!!! preprocessor read\n"), err);
-    if ((err = symbols_start("file", &sym_table)))
+    if ((err = symbols_read(tokens, defines, &sym_table)))
         return (printf("ERROR!!! symbol table read\n"), err);
 
     PrintFile(tokens, defines);

@@ -159,12 +159,13 @@ struct sym {
 struct scope {
     vector_t types;
     size_t types_count;
-    vector_t functions;
-    size_t functions_count;
     vector_t variables;
     size_t variables_count;
     vector_t scopes;
     size_t scopes_count;
+    scope_t *parent_scope;
+    size_t open_idx;
+    size_t close_idx;
 };
 
 
@@ -174,6 +175,8 @@ struct scope {
 struct sym_table {
     char file_name[FILENAME_MAX_SIZE];
     hash_t symbols;
+    vector_t functions;
+    size_t functions_count;
     scope_t g_scope;
 };
 

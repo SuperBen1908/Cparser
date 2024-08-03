@@ -1,4 +1,7 @@
 
-int M;
-
-#define M(a) M+
+int main(void)
+{
+    if (i > 0) {
+    }
+    return (0);
+}
