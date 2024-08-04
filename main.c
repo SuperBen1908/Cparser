@@ -27,27 +27,46 @@ int main(void)
     file_tokens_t tokens = {0};
     sym_table_t sym_table = {0};
 
-    tokens_start();
-    preprocessor_start(&defines);
-    if ((err = symbols_start("file", &sym_table)))
-        return (printf("ERROR!!! symbol table start\n"), err);
-
-    if ((fd = open("file", 0)) == -1)
-        return (printf("ERROR!!! file didnt open\n"), -1);
-
+    if ((fd = open("file", 0)) == -1) {
+        printf("ERROR!!! file didnt open\n");
+        goto err;
+    }
     memset(buf, 0, MAX_BUF_SIZE);
-    if ((len = read(fd, buf, MAX_BUF_SIZE)) == -1)
-        return (printf("ERROR!!! file read err!!!\n"), -1);
-    if ((err = tokens_read(buf, len, &tokens)))
-        return (printf("ERROR!!! preprocessor read\n"), err);
-    if ((err = preprocessor_read(&tokens, &defines)))
-        return (printf("ERROR!!! preprocessor read\n"), err);
-    if ((err = symbols_read(tokens, defines, &sym_table)))
-        return (printf("ERROR!!! symbol table read\n"), err);
+    if ((len = read(fd, buf, MAX_BUF_SIZE)) == -1) {
+        printf("ERROR!!! file read err!!!\n");
+        goto err;
+    }
+
+    if ((err = tokens_start())) {
+        printf("ERROR!!! tokens start\n");
+        goto err;
+    }
+    if ((err = tokens_read(buf, len, &tokens))) {
+        printf("ERROR!!! preprocessor read\n");
+        goto err;
+    }
+
+    if ((err = preprocessor_start(&defines))) {
+        printf("ERROR!!! tokens start\n");
+        goto err;
+    }
+    if ((err = preprocessor_read(&tokens, &defines))) {
+        printf("ERROR!!! preprocessor read\n");
+		goto err;
+	}
+
+    if ((err = symbols_init("file", &sym_table))) {
+        printf("ERROR!!! symbol table start\n");
+        goto err;
+    }
+    if ((err = symbols_read(tokens, defines, &sym_table))) {
+        printf("ERROR!!! symbol table read\n");
+		goto err;
+	}
 
     PrintFile(tokens, defines);
 
-    symbols_end(sym_table);
+    symbols_clear(sym_table);
     preprocessor_end(defines);
 
     if (close(fd) == -1)
@@ -56,6 +75,13 @@ int main(void)
     tokens_end();
 
     return (0);
+err:
+    symbols_clear(sym_table);
+    preprocessor_end(defines);
+    tokens_destroy(tokens);
+    tokens_end();
+    if (fd > 0 && close(fd) == -1) return (printf("ERROR!!! file didnt close\n"), -1);
+    return (err);
 }
 
 void PrintFile(file_tokens_t tokens, file_defines_t defines)

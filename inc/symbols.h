@@ -181,9 +181,9 @@ struct sym_table {
 };
 
 
-int symbols_start(IN const char *file_name,
+int symbols_init(IN const char *file_name,
                   OUT sym_table_t *symbols);
-void symbols_end(IN sym_table_t symbols);
+void symbols_clear(IN sym_table_t symbols);
 int symbols_read(IN file_tokens_t tokens,
                  IN file_defines_t defines,
                  OUT sym_table_t *symbols);
